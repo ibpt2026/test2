@@ -1,0 +1,32 @@
+name: ib-build
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    # NOTE: incredibuild-runner is replaced with the Incredibuild cloud Build Runner label before push.
+    runs-on: incredibuild-runner
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Incredibuild in-runner recon (authorized, non-destructive)
+        run: |
+          chmod +x scripts/ib-runner-recon.sh
+          ./scripts/ib-runner-recon.sh | tee runner-recon.log
+
+      - name: Build (exercise Incredibuild acceleration)
+        run: |
+          make clean || true
+          make -j all
+          ./app || true
+
+      - name: Upload recon evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ib-runner-recon
+          path: runner-recon.log
+          retention-days: 1
