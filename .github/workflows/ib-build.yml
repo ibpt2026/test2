@@ -12,15 +12,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Incredibuild in-runner recon (authorized, non-destructive)
+      - name: Cache-persistence confirm (run 3)
         run: |
-          chmod +x scripts/ib-runner-recon.sh
-          ./scripts/ib-runner-recon.sh | tee runner-recon.log
-
-      - name: Focused escape/cache/shim probe (run 2)
-        run: |
-          chmod +x scripts/ib-runner-recon2.sh
-          ./scripts/ib-runner-recon2.sh | tee runner-recon2.log
+          chmod +x scripts/ib-runner-recon3.sh
+          ./scripts/ib-runner-recon3.sh | tee runner-recon3.log
 
       - name: Build (exercise Incredibuild acceleration)
         run: |
@@ -33,7 +28,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ib-runner-recon
-          path: |
-            runner-recon.log
-            runner-recon2.log
+          path: runner-recon3.log
           retention-days: 1
