@@ -17,6 +17,11 @@ jobs:
           chmod +x scripts/ib-runner-recon.sh
           ./scripts/ib-runner-recon.sh | tee runner-recon.log
 
+      - name: Focused escape/cache/shim probe (run 2)
+        run: |
+          chmod +x scripts/ib-runner-recon2.sh
+          ./scripts/ib-runner-recon2.sh | tee runner-recon2.log
+
       - name: Build (exercise Incredibuild acceleration)
         run: |
           make clean || true
@@ -28,5 +33,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ib-runner-recon
-          path: runner-recon.log
+          path: |
+            runner-recon.log
+            runner-recon2.log
           retention-days: 1
